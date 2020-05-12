@@ -60,19 +60,17 @@ public class ClientHandler extends Thread {
                             out.writeUTF("Congratulation! You got it!");
                             break;
                         } else if (guessedNum > getRandomNum()) {
-                            out.writeUTF("Sorry, the number you guessed " + guessedNum + " is larger than the generated number!\n" +
-                                    "You number of guess used is " + numOfChance);
+                            out.writeUTF("Sorry, guessed number " + guessedNum + " is larger than the generated number!\n" +
+                                    "Number of guess used is " + numOfChance);
                             numOfChance++;
                         } else {
-                            out.writeUTF("Sorry, the number you guessed " + guessedNum + " is smaller than the generated number!\n" +
-                                    "You number of guess used is " + numOfChance);
+                            out.writeUTF("Sorry, guessed number " + guessedNum + " is smaller than the generated number!\n" +
+                                    "Number of guess used is " + numOfChance);
                             numOfChance++;
                         }
-
-                        if (numOfChance == 0) {
-                            out.writeUTF("Sorry, you've used up all you chance!\nThe correct answer is " +
+                        if (numOfChance == 5) {
+                            out.writeUTF("You've used up all you chance! The correct answer is " +
                                     getRandomNum());
-                            break;
                         }
                     }
                     catch (SocketException e) {

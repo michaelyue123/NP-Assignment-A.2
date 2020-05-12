@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dd8e1a80-d890-4879-a560-5c24f21afd50" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/Client.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ClientHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ClientHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Server.java" afterDir="false" />
     </list>
@@ -102,7 +102,7 @@
       <updated>1588566464573</updated>
       <workItem from="1588566465888" duration="14061000" />
       <workItem from="1588591453613" duration="17803000" />
-      <workItem from="1588902582705" duration="75715000" />
+      <workItem from="1588902582705" duration="77658000" />
     </task>
     <servers />
   </component>

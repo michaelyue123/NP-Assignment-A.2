@@ -15,6 +15,7 @@ public class Client extends Thread {
     private Scanner sc;
     private DataInputStream in;
     private DataOutputStream out;
+    private static final int MAX_GUESS = 4;
 
 
     public Client() {
@@ -35,10 +36,11 @@ public class Client extends Thread {
     @Override
     public void run() {
         String userInput;
+        int numOfChance = 0;
         try{
             while (true) {
-                String serverMessage = in.readUTF();  // read the message from server
-                System.out.println(serverMessage); // print out the welcome message
+                String welcomeMessage = in.readUTF();  // read the message from server
+                System.out.println(welcomeMessage); // print out the welcome message
 
                 System.out.println("Please enter your name first: ");
 
@@ -71,7 +73,7 @@ public class Client extends Thread {
 
                 System.out.println("Game Starts! Please enter a number:");
 
-                while(true) {
+                while(numOfChance < MAX_GUESS) {
                     userInput = sc.nextLine();
 
                     // input needs be number within 0 to 12 this range
@@ -83,34 +85,39 @@ public class Client extends Thread {
                             break;
                         } else if(hintMessage.contains("larger")) {
                             System.out.println(hintMessage);
+                            numOfChance++;
+                            if(numOfChance == 4) {
+                                System.out.println(in.readUTF());
+                                break;
+                            }
                         } else if(hintMessage.contains("smaller")) {
                             System.out.println(hintMessage);
+                            numOfChance++;
+                            if(numOfChance == 4) {
+                                System.out.println(in.readUTF());
+                                break;
+                            }
                         }
-//                        String[] arr = hintMessage.split(" ");
-//                        if(arr[arr.length-1] == "0") {
-//                            System.out.println(in.readUTF());
-//                            break;
-//                        }
                     }else {
                         System.out.println("Only number between 0 and 12 is allowed!");
                     }
                 }
 
-                serverMessage = in.readUTF();
-                System.out.println(serverMessage);
+                String replayMessage = in.readUTF();
+                System.out.println(replayMessage);
 
                 while (true) {
                     userInput = sc.nextLine();
 
                     if(userInput.equals("p") || userInput.equals("q")) {
                         out.writeUTF(userInput);
-                        if(serverMessage.contains("GoodBye")) {
-                            System.out.println(serverMessage);
+                        if(replayMessage.contains("GoodBye")) {
+                            System.out.println(replayMessage);
                             System.exit(0);
                             break;
                         }
-                        else if(serverMessage.contains("lobby")) {
-                            System.out.println(serverMessage);
+                        else if(replayMessage.contains("lobby")) {
+                            System.out.println(replayMessage);
                             break;
                         }
                     }else {
