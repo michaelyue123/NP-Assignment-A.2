@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dd8e1a80-d890-4879-a560-5c24f21afd50" name="Default Changelist" comment="" />
+    <list default="true" id="dd8e1a80-d890-4879-a560-5c24f21afd50" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Server.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,19 +35,25 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1bQZq2E7ZgJrKuztVJzkOxuCGnK" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DatabaseDriversLRU" value="hsqldb" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RunManager" selected="Application.Client">
@@ -89,7 +102,7 @@
       <updated>1588566464573</updated>
       <workItem from="1588566465888" duration="14061000" />
       <workItem from="1588591453613" duration="17803000" />
-      <workItem from="1588902582705" duration="35613000" />
+      <workItem from="1588902582705" duration="75715000" />
     </task>
     <servers />
   </component>
@@ -101,10 +114,10 @@
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>
     <state x="431" y="-1096" key="#com.intellij.execution.impl.EditConfigurationsDialog/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1588994713913" />
-    <state x="1495" y="-1045" key="#com.intellij.ide.util.MemberChooser" timestamp="1588569029467">
+    <state x="1495" y="-1045" key="#com.intellij.ide.util.MemberChooser" timestamp="1589176376211">
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>
-    <state x="1495" y="-1045" key="#com.intellij.ide.util.MemberChooser/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1588569029467" />
+    <state x="1495" y="-1045" key="#com.intellij.ide.util.MemberChooser/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1589176376211" />
     <state x="1354" y="-1007" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1588575153936">
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>
@@ -149,10 +162,10 @@
     </state>
     <state width="2144" height="460" key="GridCell.Tab.1.right/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1589004106013" />
     <state width="1638" height="309" key="GridCell.Tab.1.right/0.23.1680.937@0.23.1680.937" timestamp="1589017515803" />
-    <state x="1237" y="-1179" key="SettingsEditor" timestamp="1588998486515">
+    <state x="1237" y="-1179" key="SettingsEditor" timestamp="1589174492362">
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>
-    <state x="1237" y="-1179" key="SettingsEditor/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1588998486515" />
+    <state x="1237" y="-1179" key="SettingsEditor/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1589174492362" />
     <state x="1258" y="-928" key="com.intellij.ide.util.TipDialog" timestamp="1588591454896">
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>

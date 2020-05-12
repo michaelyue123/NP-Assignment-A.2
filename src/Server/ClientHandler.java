@@ -6,7 +6,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class ClientHandler extends Thread {
@@ -16,15 +16,15 @@ public class ClientHandler extends Thread {
     private static final int MAX_GUESS = 4;
     private int randomNum;
     private String name;
+    LinkedList<String> playerList = new LinkedList<>();
 
 
     public ClientHandler(Socket connection, int randomNum) {
-        this.randomNum = randomNum;
-
         try {
             // get the InputStream and OutputStream from the connection
             out = new DataOutputStream(connection.getOutputStream());
             in = new DataInputStream(connection.getInputStream());
+            this.randomNum = randomNum;
         } catch (IOException e) {
             e.getMessage();
         }
@@ -32,7 +32,7 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        int numOfChance = MAX_GUESS;
+        int numOfChance = 1;
         int guessedNum;
 //        Timer timer;
 
@@ -44,55 +44,66 @@ public class ClientHandler extends Thread {
 
                 // receive client name input
                 String playerName = in.readUTF();
-
                 setPlayerName(playerName);
-                System.out.print(getPlayerName() + " ");
+                playerList.add(playerName);
+                System.out.println("* " + getPlayerName());
 
-                while (numOfChance > 0) {
-                    String guessNum = in.readUTF();
-                    // receive client guess number
-                    guessedNum = Integer.parseInt(guessNum.trim()); // parse user input to integer
-                    if (guessedNum == getRandomNum()) { // if randomly generated number equals to input, player wins
-                        out.writeUTF("Congratulation! You got it!");
-                        break;
-                    } else if (guessedNum > getRandomNum()) {
-                        numOfChance--;
-                        out.writeUTF("Sorry, the number you guessed " + guessedNum + " is larger than the generated number!\n" +
-                                "You number of guess left is " + numOfChance);
-                        if (numOfChance == 0) {
-                            out.writeUTF("Sorry, you've used up all you chance!\nThe correct answer is " +
-                                    getRandomNum());
+                out.writeUTF("Please wait a few seconds for other players to enter their name.");
+
+
+                while (numOfChance <= MAX_GUESS) {
+                    try{
+                        String guessNum = in.readUTF();
+                        // receive client guess number
+                        guessedNum = Integer.parseInt(guessNum.trim()); // parse user input to integer
+                        if (guessedNum == getRandomNum()) { // if randomly generated number equals to input, player wins
+                            out.writeUTF("Congratulation! You got it!");
                             break;
+                        } else if (guessedNum > getRandomNum()) {
+                            out.writeUTF("Sorry, the number you guessed " + guessedNum + " is larger than the generated number!\n" +
+                                    "You number of guess used is " + numOfChance);
+                            numOfChance++;
+                        } else {
+                            out.writeUTF("Sorry, the number you guessed " + guessedNum + " is smaller than the generated number!\n" +
+                                    "You number of guess used is " + numOfChance);
+                            numOfChance++;
                         }
-                    } else {
-                        numOfChance--;
-                        out.writeUTF("Sorry, the number you guessed " + guessedNum + " is smaller than the generated number!\n" +
-                                "You number of guess left is " + numOfChance);
+
                         if (numOfChance == 0) {
                             out.writeUTF("Sorry, you've used up all you chance!\nThe correct answer is " +
                                     getRandomNum());
                             break;
                         }
                     }
+                    catch (SocketException e) {
+                        System.out.println(getPlayerList().get(0) + " has disconnected from the server!");
+                    }
                 }
 
-                out.writeUTF("Choose p to play again or q to quit.");
-                String userInput = in.readUTF();
-                if(userInput.equals("q")) {
-                    out.writeUTF("You have quit the game! GoodBye!");
-                    System.exit(0);
-                    break;
-                } else {
-                    out.writeUTF("New round will start!");
-                    continue;
+                System.out.println("--------------------------");
+                System.out.println(getPlayerList().get(0) + " ended the game. " + getPlayerList().get(0) + " " + (numOfChance-1));
+
+
+                while (true) {
+                    out.writeUTF("Choose p to play again or q to quit.");
+                    String userInput = in.readUTF();
+                    if (userInput.equals("q")) {
+                        out.writeUTF("You have quit the game! GoodBye!");
+                        return;
+                    } else {
+                        out.writeUTF("You will be taken to lobby first!");
+                        break;
+                    }
                 }
             }
         }
-        catch (SocketException e) {
-            e.printStackTrace();
-        }
         catch (EOFException e) {
-            System.out.println("\nOne player has disconnected from the server!");
+            if(playerList.size() != 0) {
+                System.out.println(getPlayerList().get(0) + " has disconnected from the server!");
+            }else {
+                System.out.println("One player has disconnected from the server!");
+            }
+            return;
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -111,8 +122,12 @@ public class ClientHandler extends Thread {
         return name;
     }
 
-    public void setPlayerName(String name) {
-        this.name = name;
+    public void setPlayerName(String playerName) {
+        this.name = playerName;
+    }
+
+    public LinkedList<String> getPlayerList() {
+        return playerList;
     }
 
     public int getRandomNum() {
