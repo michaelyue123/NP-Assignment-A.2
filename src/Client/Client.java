@@ -17,6 +17,7 @@ public class Client extends Thread {
     private DataOutputStream out;
     private static final int MAX_GUESS = 4;
     private String userInput;
+    private String name;
 
 
     public Client() {
@@ -38,6 +39,7 @@ public class Client extends Thread {
         while (true) {
             userInput = sc.nextLine();
             if(userInput.matches("^[A-Za-z]+([ A-Za-z]+)*")) {
+                setPlayerName(userInput);
                 out.writeUTF(userInput); // send client message to server
                 break;
             }else {
@@ -50,13 +52,20 @@ public class Client extends Thread {
     public void run() {
         int numOfChance = 0;
         try{
+            String welcomeMessage = in.readUTF();  // read the message from server
+            System.out.println(welcomeMessage); // print out the welcome message
+
             while (true) {
-                String welcomeMessage = in.readUTF();  // read the message from server
-                System.out.println(welcomeMessage); // print out the welcome message
 
-                System.out.println("Please enter your name first: ");
-
-                sendNameInput();
+                if(this.name == null) {
+                    System.out.println("Please enter your name first: ");
+                    sendNameInput();
+                    String alertMessage = in.readUTF();
+                    if(alertMessage.contains("wait")) {
+                        System.out.println(alertMessage);
+                    }
+                    sleep(5000); // sleep current thread for 10s
+                }
 
 
 //                    // create a timer to receive server message every 10s if client is not active
@@ -69,12 +78,6 @@ public class Client extends Thread {
 
 //                serverMessage = in.readUTF();
 
-                String alertMessage = in.readUTF();
-                if(alertMessage.contains("wait")) {
-                    System.out.println(alertMessage);
-                }
-
-                sleep(5000); // sleep current thread for 10s
 
                 System.out.println("Game Starts! Please enter a number:");
 
@@ -156,6 +159,10 @@ public class Client extends Thread {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setPlayerName(String name) {
+        this.name = name;
     }
 
     public static void main(String[] args) {

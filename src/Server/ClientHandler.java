@@ -20,7 +20,7 @@ public class ClientHandler extends Thread {
     private Socket connection;
     private static int numOfChance = 1;
     private static int guessedNum = 0;
-    private boolean notInGameRound = true;
+    private String userInput;
 
     public ClientHandler(Socket connection, Server server, String name) {
         try {
@@ -42,24 +42,25 @@ public class ClientHandler extends Thread {
 
         try {
             while (true) {
-                // send messages to client
-                out.writeUTF("Welcome to guessing game! You have maximum four guesses and at each wrong guess" +
-                        " you will receive a hint. At the end, server will announce the answer.\n");
-
-                // check if players have entered their names
-
-                inputPlayerName();
-
-                if(!notInGameRound) {
-                    gameRound();
+                try {
+                    // send messages to client
+                    out.writeUTF("Welcome to guessing game! You have maximum four guesses and at each wrong guess" +
+                            " you will receive a hint. At the end, server will announce the answer.\n");
+                    // check if players have entered their names
+                    if(this.name == null) {
+                        inputPlayerName();
+                    } else {
+                        gameRound();
+                    }
+                    break;
                 }
-                break;
+                catch (NullPointerException e) {
+                    continue;
+                }
             }
-
-
         }
         catch (SocketException e) {
-            System.out.println("");
+            e.printStackTrace();
         }
         catch (EOFException e) {
             if(this.name == null) {
@@ -90,11 +91,11 @@ public class ClientHandler extends Thread {
     }
 
     public void gameRound() throws IOException {
-        randomNum = server.getRandomNum(); // set the random number to auto-generated number from the server
-        System.out.println(getRandomNum());
-
         while (numOfChance <= MAX_GUESS) {
             try {
+                randomNum = server.getRandomNum(); // set the random number to auto-generated number from the server
+                System.out.println(getRandomNum());
+
                 String guessNum = in.readUTF();
                 // receive client guess number
                 guessedNum = Integer.parseInt(guessNum.trim()); // parse user input to integer
@@ -119,12 +120,12 @@ public class ClientHandler extends Thread {
             }
         }
 
-        System.out.println("--------------------------");
+//        System.out.println("--------------------------");
         System.out.println(getPlayerName() + " ended the game. " + getPlayerName() + " " + (numOfChance - 1));
 
         while (true) {
             out.writeUTF("Choose p to play again or q to quit.");
-            String userInput = in.readUTF();
+            userInput = in.readUTF();
             if (userInput.equals("q")) {
                 out.writeUTF("You have quit the game! GoodBye!");
                 System.exit(0);
@@ -140,10 +141,6 @@ public class ClientHandler extends Thread {
         return connection;
     }
 
-    public void startGameRound() {
-        notInGameRound = false;
-    }
-
     public String getPlayerName() {
         return name;
     }
@@ -154,5 +151,9 @@ public class ClientHandler extends Thread {
 
     public int getRandomNum() {
         return randomNum;
+    }
+
+    public String getUserInput() {
+        return userInput;
     }
 }
