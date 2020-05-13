@@ -1,5 +1,6 @@
 //package Server;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
 import java.util.LinkedList;
@@ -12,11 +13,10 @@ public class Server {
     private Socket connection;
     LinkedList<ClientHandler> gameRound;
     LinkedList<ClientHandler> lobby;
-    LinkedList<String> playerList = new LinkedList<>();
-    private final int MIN = 0;
-    private final int MAX = 12;
-    private int randomNum;
-    private final int ALLOWED_NUMBER = 3;
+    private static final int MIN = 0;
+    private static final int MAX = 12;
+    private static int randomNum;
+    private static final int ALLOWED_NUMBER = 3;
 
 
     public Server() {
@@ -31,7 +31,6 @@ public class Server {
             server = new ServerSocket(PORT);
             System.out.println("Server starts");
             System.out.println("Waiting for new player loading for 10s");
-            setRandomNum(generateRanInt(MIN,MAX));
 
             while (true) {
                 while (true) {
@@ -41,7 +40,8 @@ public class Server {
                         connection = server.accept();
 
                         if (lobby.size() <= 6) { // Lobby holds maximum 6 players.
-                            lobby.add(new ClientHandler(connection, randomNum));
+                            ClientHandler clientHandler = new ClientHandler(connection, this, null);
+                            lobby.add(clientHandler);
                         } else {
                             System.out.println("Lobby can only hold maximum 6 players!");
                         }
@@ -57,13 +57,13 @@ public class Server {
                             if (lobby.size() > 3) {
                                 for (int i = 0; i <= ALLOWED_NUMBER; i++) {
                                     gameRound.add(lobby.get(i));
+                                    lobby.remove(); // remove first three elements inside lobby
                                 }
                             } else {
                                 gameRound.addAll(lobby);
-                            }
-
-                            for (int i = 0; i < gameRound.size(); i++) {
-                                gameRound.get(i).start(); // start the thread
+                                for(int i=0; i<=lobby.size(); i++) {
+                                    lobby.remove(); // remove all elements inside lobby
+                                }
                             }
                             System.out.println("Time's up! New players will not be accepted!");
                             break;
@@ -75,41 +75,41 @@ public class Server {
 
                 while (true) {
                     try {
-                        server.setSoTimeout(300000); // the whole game will last 5 minutes;
                         System.out.println("---------------------------------------------");
-                        System.out.println("Randomly generated number: " + getRandomNum());
-                        System.out.println("Current players: ");
 
-                        for (int i = 0; i < gameRound.size(); i++) {
-                            gameRound.get(i).join(); // avoid race condition
-                            playerList.addAll(gameRound.get(i).getPlayerList()); // store player name into a linkedlist on the server
+                        for (ClientHandler player : gameRound) {
+                            player.start();
                         }
 
+                        int n = 0;
+                        System.out.print("Current Player: ");
+                        for(ClientHandler player : gameRound) {
+                            player.join(); // wait for all players entering their name
 
+                            System.out.print(player.getPlayerName() + " ");
+                            // reset game round with newly updated players
+                            ClientHandler readyPlayer = new ClientHandler(player.getConnection(), this, player.getPlayerName());
+                            gameRound.set(n, readyPlayer);
+                            n++;
+                        }
 
+//                        server.setSoTimeout(300000); // the whole game will last 5 minutes;
+                        setRandomNum(generateRanInt(MIN,MAX));
+                        System.out.println("\nRandomly generated number: " + getRandomNum());
+
+                        for(ClientHandler player : gameRound) {
+                            player.startGameRound();
+                            player.join(); // wait for all players finishing their game round
+                        }
+
+                        
                         break;
-
-//                        for(int i=0; i<gameRound.size(); i++) {
-//                            gameRound.remove(); // remove all elements inside game round
-//                        }
-//
-//                        if(lobby.size() > 3) {
-//                            // remove first three elements inside lobby
-//                            for(int i=0; i<=ALLOWED_NUMBER; i++) {
-//                                lobby.remove();
-//                            }
-//                        }else {
-//                            // remove all elements inside lobby
-//                            for(int i=0; i<=lobby.size(); i++) {
-//                                lobby.remove();
-//                            }
-//                        }
-
-
-                    } catch (SocketException e) {
-                        return;
-                    } catch (NoSuchElementException e) {
-                        return;
+                    }
+                     catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                     catch (NoSuchElementException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -117,11 +117,8 @@ public class Server {
         catch (BindException e) {
             System.out.println("");
         }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         catch (IllegalThreadStateException e) {
-            System.out.println("Sorry, all players have disconnected from the server. Server has stopped!");
+            e.printStackTrace();
         }
         catch (IOException e) {
             e.printStackTrace();
