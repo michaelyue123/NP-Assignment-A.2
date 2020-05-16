@@ -35,7 +35,7 @@ public class Server {
             while (true) {
                 while (true) {
                     try {
-                        server.setSoTimeout(10000); // after 10s, server will not accept any connection
+                        server.setSoTimeout(5000); // after 10s, server will not accept any connection
                         // accept connection from the client
                         connection = server.accept();
 
@@ -78,50 +78,47 @@ public class Server {
                         System.out.println("---------------------------------------------");
 
                         for (ClientHandler player : gameRound) {
-                            try {
-                                player.start();
-                            }
-                            catch (IllegalThreadStateException e) {
-                                player.run();
-                                System.out.println("Thread has already started.");
-                            }
+                            player.start();
                         }
+//                        server.setSoTimeout(300000); // the whole game will last 5 minutes;
+                        setRandomNum(generateRanInt(MIN,MAX));
+                        System.out.println("Randomly generated number: " + getRandomNum());
 
-                        LinkedList<ClientHandler> tempList = new LinkedList<>();
                         System.out.print("Current Player: ");
+                        int n = 0;
                         for(ClientHandler player : gameRound) {
                             player.join(); // wait for all players entering their name
 
                             System.out.print(player.getPlayerName() + " ");
                             // reset game round with newly updated players
                             ClientHandler readyPlayer = new ClientHandler(player.getConnection(), this, player.getPlayerName());
-                            tempList.add(readyPlayer);
+                            gameRound.set(n, readyPlayer);
+                            n++;
                         }
-                        gameRound.removeAll(gameRound); // clean the game round
-                        gameRound.addAll(tempList); // add newly updated players to game round
-
-//                        server.setSoTimeout(300000); // the whole game will last 5 minutes;
-                        setRandomNum(generateRanInt(MIN,MAX));
-                        System.out.println("\nRandomly generated number: " + getRandomNum());
 
                         // start the game round
                         for(ClientHandler player : gameRound) {
-                            player.start();
+                            try {
+                                player.changeAction(); // switch to game round
+                                player.start();
+                            }
+                            catch (IllegalThreadStateException e) {
+//                                gameRound.remove(player);
+                            }
                         }
 
                         for(ClientHandler player : gameRound) {
                             player.join();
-                        }
-
-//                        // check if user input equal q or p
-//                        if(player.getUserInput() != null) {
-//                            if(player.getUserInput().equals("p")) {
-//                                lobby.add(player);
+//                            // check if user input equal q or p
+//                            if(player.getUserInput() != null) {
+//                                if(player.getUserInput().equals("p")) {
+//                                    lobby.add(player);
+//                                }
 //                            }
-//                        }
-//                        else {
-//                            System.out.println("No user input is found!");
-//                        }
+//                            else {
+//                                System.out.println("No user input is found!");
+//                            }
+                        }
 
                         // move players from lobby to game round or otherwise end the game if there is no player in the lobby.
                         if(lobby.size() > 0 && lobby.size() <=3) {
@@ -147,20 +144,13 @@ public class Server {
             }
         }
         catch (BindException e) {
-            System.out.println("");
+            e.printStackTrace();
         }
         catch (IllegalThreadStateException e) {
             e.printStackTrace();
         }
         catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
-            try {
-                if(server != null) server.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 

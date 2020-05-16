@@ -6,7 +6,6 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.LinkedList;
 
 
 public class ClientHandler extends Thread {
@@ -14,13 +13,14 @@ public class ClientHandler extends Thread {
     private DataOutputStream out;
     private DataInputStream in;
     private static final int MAX_GUESS = 4;
-    private static int randomNum;
+    private static int randomNum = 0;
     private Server server;
-    private String name;
+    private String name = null;
     private Socket connection;
-    private static int numOfChance = 1;
+    private static int numOfChance = 0;
     private static int guessedNum = 0;
     private String userInput;
+    private boolean hasChangeAction = false;
 
     public ClientHandler(Socket connection, Server server, String name) {
         try {
@@ -31,7 +31,7 @@ public class ClientHandler extends Thread {
             this.name = name;
             this.connection = connection;
         } catch (IOException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
     }
 
@@ -41,44 +41,36 @@ public class ClientHandler extends Thread {
 //        Timer timer;
 
         try {
+            // send messages to client
+            out.writeUTF("Welcome to guessing game! You have maximum four guesses and at each wrong guess" +
+                    " you will receive a hint. At the end, server will announce the answer.\n");
+
             while (true) {
-                try {
-                    // send messages to client
-                    out.writeUTF("Welcome to guessing game! You have maximum four guesses and at each wrong guess" +
-                            " you will receive a hint. At the end, server will announce the answer.\n");
-                    // check if players have entered their names
-                    if(this.name == null) {
-                        inputPlayerName();
-                    } else {
-                        gameRound();
-                    }
-                    break;
+                // check if players have entered their names
+                if(this.name == null) {
+                    inputPlayerName();
                 }
-                catch (NullPointerException e) {
-                    continue;
-                }
+                break;
             }
+
+            while (true) {
+                if(hasChangeAction) {
+                    gameRound();
+                }
+                break;
+            }
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
         }
         catch (SocketException e) {
             e.printStackTrace();
         }
         catch (EOFException e) {
-            if(this.name == null) {
-                System.out.println("One player has disconnected from the server!");
-            }
-            else {
-                System.out.println(getPlayerName() + " has disconnected from the server!");
-            }
+            System.out.println("\nOne player has disconnected from the server!");
         }
         catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if(in != null) in.close();
-                if(out != null) out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -90,51 +82,53 @@ public class ClientHandler extends Thread {
         out.writeUTF("Please wait for other players entering their name.");
     }
 
-    public void gameRound() throws IOException {
-        while (numOfChance <= MAX_GUESS) {
-            try {
-                randomNum = server.getRandomNum(); // set the random number to auto-generated number from the server
-                System.out.println(getRandomNum());
+    public void gameRound() throws IOException, SocketException {
+        randomNum = server.getRandomNum(); // set the random number to auto-generated number from the server
+       try {
+           while (numOfChance<=MAX_GUESS) {
+               // receive client guess number
+               String guessNum = in.readUTF();
+               guessedNum = Integer.parseInt(guessNum.trim()); // parse user input to integer
+               if (guessedNum == getRandomNum()) { // if randomly generated number equals to input, player wins
+                   out.writeUTF("Congratulation! You got it!");
+                   System.out.println("\n" + getPlayerName() + " has ended the game. " + getPlayerName() + " " + (numOfChance+1));
+                   break;
+               } else if (guessedNum > getRandomNum()) {
+                   out.writeUTF("Sorry, guessed number " + guessedNum + " is larger than the generated number!\n" +
+                           "Number of guess used is " + (numOfChance+1));
+                   numOfChance++;
+               } else {
+                   out.writeUTF("Sorry, guessed number " + guessedNum + " is smaller than the generated number!\n" +
+                           "Number of guess used is " + (numOfChance+1));
+                   numOfChance++;
+               }
+               if (numOfChance == MAX_GUESS) {
+                   out.writeUTF("You've used up all you chance! The correct answer is " +
+                           getRandomNum());
+                   System.out.println("\n---------------------------------------------");
+                   System.out.println(getPlayerName() + " has ended the game. " + getPlayerName() + " " + numOfChance);
+               }
+           }
 
-                String guessNum = in.readUTF();
-                // receive client guess number
-                guessedNum = Integer.parseInt(guessNum.trim()); // parse user input to integer
-                if (guessedNum == getRandomNum()) { // if randomly generated number equals to input, player wins
-                    out.writeUTF("Congratulation! You got it!");
-                    break;
-                } else if (guessedNum > getRandomNum()) {
-                    out.writeUTF("Sorry, guessed number " + guessedNum + " is larger than the generated number!\n" +
-                            "Number of guess used is " + numOfChance);
-                    numOfChance++;
-                } else {
-                    out.writeUTF("Sorry, guessed number " + guessedNum + " is smaller than the generated number!\n" +
-                            "Number of guess used is " + numOfChance);
-                    numOfChance++;
-                }
-                if (numOfChance == 5) {
-                    out.writeUTF("You've used up all you chance! The correct answer is " +
-                            getRandomNum());
-                }
-            } catch (SocketException e) {
-                System.out.println(getPlayerName() + " has disconnected from the server!");
-            }
-        }
-
-//        System.out.println("--------------------------");
-        System.out.println(getPlayerName() + " ended the game. " + getPlayerName() + " " + (numOfChance - 1));
-
-        while (true) {
-            out.writeUTF("Choose p to play again or q to quit.");
-            userInput = in.readUTF();
-            if (userInput.equals("q")) {
-                out.writeUTF("You have quit the game! GoodBye!");
-                System.exit(0);
-            } else {
-                out.writeUTF("Re-add you to lobby! Please wait...");
-            }
-            break;
-        }
-
+           while (true) {
+               out.writeUTF("Choose p to play again or q to quit.");
+               userInput = in.readUTF();
+               if (userInput.equals("q")) {
+                   out.writeUTF("You have quit the game! GoodBye!");
+                   System.out.println(getPlayerName() + " has quit the game!");
+               } else {
+                   out.writeUTF("Re-add you to lobby! Please wait...");
+                   System.out.println(getPlayerName() + " are re-added to the lobby!");
+               }
+               break;
+           }
+       }
+       catch (SocketException e) {
+           System.out.println("\n" + getPlayerName() + " has disconnected from the server!");
+       }
+    }
+    public void changeAction() {
+        this.hasChangeAction = !hasChangeAction;
     }
 
     public Socket getConnection() {
