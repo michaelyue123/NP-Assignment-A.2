@@ -97,6 +97,7 @@ public class Server {
                         }
 
                         // start the game round
+                        System.out.println("\n---------------------------------------------");
                         for(ClientHandler player : gameRound) {
                             try {
                                 player.changeAction(); // switch to game round

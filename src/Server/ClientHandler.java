@@ -17,7 +17,6 @@ public class ClientHandler extends Thread {
     private Server server;
     private String name = null;
     private Socket connection;
-    private static int numOfChance = 0;
     private static int guessedNum = 0;
     private String userInput;
     private boolean hasChangeAction = false;
@@ -41,13 +40,13 @@ public class ClientHandler extends Thread {
 //        Timer timer;
 
         try {
-            // send messages to client
-            out.writeUTF("Welcome to guessing game! You have maximum four guesses and at each wrong guess" +
-                    " you will receive a hint. At the end, server will announce the answer.\n");
-
             while (true) {
                 // check if players have entered their names
                 if(this.name == null) {
+                    // send messages to client
+                    out.writeUTF("Welcome to guessing game! You have maximum four guesses and at each wrong guess" +
+                            " you will receive a hint. At the end, server will announce the answer.\n");
+
                     inputPlayerName();
                 }
                 break;
@@ -83,6 +82,7 @@ public class ClientHandler extends Thread {
     }
 
     public void gameRound() throws IOException, SocketException {
+        int numOfChance = 0;
         randomNum = server.getRandomNum(); // set the random number to auto-generated number from the server
        try {
            while (numOfChance<=MAX_GUESS) {
@@ -91,7 +91,7 @@ public class ClientHandler extends Thread {
                guessedNum = Integer.parseInt(guessNum.trim()); // parse user input to integer
                if (guessedNum == getRandomNum()) { // if randomly generated number equals to input, player wins
                    out.writeUTF("Congratulation! You got it!");
-                   System.out.println("\n" + getPlayerName() + " has ended the game. " + getPlayerName() + " " + (numOfChance+1));
+                   System.out.println(getPlayerName() + " has ended the game. " + getPlayerName() + " " + (numOfChance+1));
                    break;
                } else if (guessedNum > getRandomNum()) {
                    out.writeUTF("Sorry, guessed number " + guessedNum + " is larger than the generated number!\n" +
@@ -105,8 +105,8 @@ public class ClientHandler extends Thread {
                if (numOfChance == MAX_GUESS) {
                    out.writeUTF("You've used up all you chance! The correct answer is " +
                            getRandomNum());
-                   System.out.println("\n---------------------------------------------");
-                   System.out.println(getPlayerName() + " has ended the game. " + getPlayerName() + " " + numOfChance);
+                   System.out.println(getPlayerName() + " has ended the game. " + getPlayerName() + " " + numOfChance + "(Fail)");
+                   break;
                }
            }
 

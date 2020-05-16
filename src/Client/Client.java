@@ -17,7 +17,6 @@ public class Client extends Thread {
     private DataInputStream in;
     private DataOutputStream out;
     private static final int MAX_GUESS = 4;
-    private static int numOfChance = 0;
     private String userInput;
     private String name;
 
@@ -80,6 +79,7 @@ public class Client extends Thread {
 
 
                 System.out.println("Game Starts! Please enter a number:");
+                int numOfChance = 0;
 
                 while(numOfChance <= MAX_GUESS) {
                     userInput = sc.nextLine();
