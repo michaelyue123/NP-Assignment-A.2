@@ -52,18 +52,13 @@ public class Client extends Thread {
     @Override
     public void run() {
         try{
-            String welcomeMessage = in.readUTF();  // read the message from server
-            System.out.println(welcomeMessage); // print out the welcome message
+            // read the message from server
+            System.out.println(in.readUTF()); // print out the welcome message
 
             while (true) {
                 if(this.name == null) {
                     System.out.println("Please enter your name first: ");
                     sendNameInput();
-                    String alertMessage = in.readUTF();
-                    if(alertMessage.contains("wait")) {
-                        System.out.println(alertMessage);
-                    }
-                    sleep(5000); // sleep current thread for 10s
                 }
 
 
@@ -78,10 +73,12 @@ public class Client extends Thread {
 //                serverMessage = in.readUTF();
 
 
-                System.out.println("Game Starts! Please enter a number:");
+                // Game start message received from the server
+                System.out.println(in.readUTF());
+
                 int numOfChance = 0;
 
-                while(numOfChance <= MAX_GUESS) {
+                while(numOfChance < MAX_GUESS) {
                     userInput = sc.nextLine();
                     // input needs be number within 0 to 12 this range
                     if(userInput.matches("^([0-9]|1[012])$")) {
@@ -121,12 +118,17 @@ public class Client extends Thread {
                     userInput = sc.nextLine();
 
                     // only p or q is allowed
-                    if(userInput.equals("p")) {
+                    if("p".equals(userInput)) {
                         out.writeUTF(userInput);
+                        System.out.println(in.readUTF());
                         break;
                     }
-                    else if(userInput.equals("q")) {
+                    else if("q".equals(userInput)) {
                         out.writeUTF(userInput);
+                        System.out.println("You have quit the game! GoodBye!");
+                        in.close();
+                        out.close();
+                        sc.close();
                         System.exit(0);
                         break;
                     }
@@ -135,9 +137,6 @@ public class Client extends Thread {
                     }
                 }
             }
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
         }
         catch (IOException e) {
             e.printStackTrace();
