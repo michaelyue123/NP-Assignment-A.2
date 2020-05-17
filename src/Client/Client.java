@@ -36,19 +36,6 @@ public class Client extends Thread {
         }
     }
 
-    public void sendNameInput() throws IOException {
-        while (true) {
-            userInput = sc.nextLine();
-            if(userInput.matches("^[A-Za-z]+([ A-Za-z]+)*")) {
-                setPlayerName(userInput);
-                out.writeUTF(userInput); // send client message to server
-                break;
-            }else {
-                System.out.println("Only letters are allowed!");
-            }
-        }
-    }
-
     @Override
     public void run() {
         try{
@@ -58,7 +45,13 @@ public class Client extends Thread {
             while (true) {
                 if(this.name == null) {
                     System.out.println("Please enter your name first: ");
-                    sendNameInput();
+                    userInput = sc.nextLine();
+                    if(userInput.matches("^[A-Za-z]+([ A-Za-z]+)*")) {
+                        setPlayerName(userInput);
+                        out.writeUTF(userInput); // send client message to server
+                    }else {
+                        System.out.println("Only letters are allowed!");
+                    }
                 }
 
 
