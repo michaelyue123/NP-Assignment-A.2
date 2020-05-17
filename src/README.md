@@ -42,7 +42,7 @@ cd Project Folder
 cd Server Folder
 ```
 
-* do this multiple times for client folder on different terminal windows to mimic multiple-player scenario
+* do this multiple times for client on different terminal windows to mimic multiple-player scenario
 
 ```
 cd Client Folder 
