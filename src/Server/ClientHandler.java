@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class ClientHandler extends Thread {
@@ -22,7 +24,10 @@ public class ClientHandler extends Thread {
     private String userInput;
     private boolean hasChangeAction = false;
     private static final long DELAY = 10000;
-    private static final long INTERVAL = 10000;
+    private static final long INTERVAL = 270000;
+    private static int rankPosition;
+    private static Logger MyLogger = GameLogger.getLogger();
+
 
     public ClientHandler(Socket connection, Server server, String name) {
         try {
@@ -79,10 +84,10 @@ public class ClientHandler extends Thread {
     public void gameRound() throws IOException, SocketException {
        try {
            out.writeUTF("Game Starts! Please enter a number: ");
-           int numOfChance = 0;
+           int numOfChance = 1;
            randomNum = server.getRandomNum(); // set the random number to auto-generated number from the server
 
-           while (numOfChance < MAX_GUESS) {
+           while (numOfChance <= MAX_GUESS) {
                try {
                    // create a timer and send message to client every 5s if client is not active
                    Timer numberInput_timer = new Timer("NumberInput Timer");
@@ -94,22 +99,24 @@ public class ClientHandler extends Thread {
 
                    if (guessedNum == getRandomNum()) { // if randomly generated number equals to input, player wins
                        out.writeUTF("Congratulation! You got it!");
-                       System.out.println(getPlayerName() + " has ended the game. " + getPlayerName() + " " + (numOfChance + 1));
+                       System.out.println("\n" + getPlayerName() + " got congratulated. " + getPlayerName() + " " + numOfChance + "\n");
+                       MyLogger.log(Level.INFO, (getPlayerName() + " got congratulated. " + getPlayerName() + " " + numOfChance));
                        break;
                    } else if (guessedNum > getRandomNum()) {
                        out.writeUTF("Sorry, guessed number " + guessedNum + " is larger than the generated number!\n" +
-                               "Number of guess used is " + (numOfChance + 1));
+                               "Number of guess used is " + numOfChance);
                        numOfChance++;
                    } else {
                        out.writeUTF("Sorry, guessed number " + guessedNum + " is smaller than the generated number!\n" +
-                               "Number of guess used is " + (numOfChance + 1));
+                               "Number of guess used is " + numOfChance);
                        numOfChance++;
                    }
 
-                   if (numOfChance == MAX_GUESS) {
+                   if (numOfChance == MAX_GUESS+1) {
                        out.writeUTF("You've used up all you chance! The correct answer is " +
                                getRandomNum());
-                       System.out.println(getPlayerName() + " has ended the game. " + getPlayerName() + " " + numOfChance + "(Loss)");
+                       System.out.println("\n" + getPlayerName() + " has ended the game. " + getPlayerName() + " " + numOfChance + "(Loss)\n");
+                       MyLogger.log(Level.INFO, (getPlayerName() + " has ended the game. " + getPlayerName() + " " + numOfChance + "(Loss)"));
                    }
                }
                catch (EOFException e) {
@@ -117,6 +124,9 @@ public class ClientHandler extends Thread {
                    break;
                }
            }
+
+           // get the rank position of client
+           rankPosition = numOfChance;
 
 
            while (true) {
@@ -129,7 +139,8 @@ public class ClientHandler extends Thread {
                   replayInput_timer.cancel(); // once receive user input, stop the timer
 
                   if ("q".equals(userInput)) {
-                      System.out.println(getPlayerName() + " has quit the game!");
+                      System.out.println("\n" + getPlayerName() + " has quit the game!\n");
+                      MyLogger.log(Level.INFO, (getPlayerName() + " has quit the game!"));
                   } else {
                       out.writeUTF("Re-add you to lobby! Please wait...");
                   }
@@ -168,5 +179,9 @@ public class ClientHandler extends Thread {
 
     public String getUserInput() {
         return userInput;
+    }
+
+    public int getRankPosition() {
+        return rankPosition;
     }
 }

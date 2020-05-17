@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dd8e1a80-d890-4879-a560-5c24f21afd50" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/README.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/Client.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client/ClientTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/ClientTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/ClientTask.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/ClientHandler$Player.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ClientHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ClientHandler.java" afterDir="false" />
@@ -130,10 +133,14 @@
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>
     <state x="431" y="-1096" key="#com.intellij.execution.impl.EditConfigurationsDialog/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1588994713913" />
-    <state x="1495" y="-1045" key="#com.intellij.ide.util.MemberChooser" timestamp="1589176376211">
+    <state x="1365" y="-951" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1589699294519">
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>
-    <state x="1495" y="-1045" key="#com.intellij.ide.util.MemberChooser/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1589176376211" />
+    <state x="1365" y="-951" key="#com.intellij.fileTypes.FileTypeChooser/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1589699294519" />
+    <state x="1495" y="-1045" key="#com.intellij.ide.util.MemberChooser" timestamp="1589684344418">
+      <screen x="-766" y="-1417" width="3440" height="1314" />
+    </state>
+    <state x="1495" y="-1045" key="#com.intellij.ide.util.MemberChooser/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1589684344418" />
     <state x="1354" y="-1007" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1588575153936">
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>
@@ -186,5 +193,9 @@
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>
     <state x="1258" y="-928" key="com.intellij.ide.util.TipDialog/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1588591454896" />
+    <state x="1279" y="-1118" width="670" height="676" key="search.everywhere.popup" timestamp="1589700546824">
+      <screen x="-766" y="-1417" width="3440" height="1314" />
+    </state>
+    <state x="1279" y="-1118" width="670" height="676" key="search.everywhere.popup/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1589700546824" />
   </component>
 </project>

@@ -1,11 +1,11 @@
 //package Server;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Server {
 
@@ -17,6 +17,7 @@ public class Server {
     private static final int MAX = 12;
     private static int randomNum;
     private static final int ALLOWED_NUMBER = 3;
+    private static Logger MyLogger = GameLogger.getLogger();
 
 
     public Server() {
@@ -29,13 +30,16 @@ public class Server {
         try {
             // create a server socket
             server = new ServerSocket(PORT);
-            System.out.println("Server starts");
-            System.out.println("Waiting for new player loading for 10s");
+            MyLogger.log(Level.INFO, "Server starts");
+            System.out.println("Server starts\n");
+
+            MyLogger.log(Level.INFO, "Waiting for new player loading for 10s");
+            System.out.println("Waiting for new player loading for 10s\n");
 
             while (true) {
                 while (true) {
                     try {
-                        server.setSoTimeout(5000); // after 10s, server will not accept any connection
+                        server.setSoTimeout(10000); // after 10s, server will not accept any connection
                         // accept connection from the client
                         connection = server.accept();
 
@@ -43,13 +47,16 @@ public class Server {
                             ClientHandler clientHandler = new ClientHandler(connection, this, null);
                             lobby.add(clientHandler);
                         } else {
-                            System.out.println("Lobby can only hold maximum 6 players!");
+                            MyLogger.log(Level.INFO, "Lobby can only hold maximum 6 players!");
+                            System.out.println("Lobby can only hold maximum 6 players!\n");
                         }
-                        System.out.println("One player has joined the game!");
+                        System.out.println("One player has joined the game!\n");
+                        MyLogger.log(Level.INFO, "One player has joined the game!\n");
 
                     } catch (SocketTimeoutException e) {
                         if (lobby.size() == 0) {
                             System.out.println("No player is in the lobby! Game has stopped!");
+                            MyLogger.log(Level.INFO, "No player is in the lobby! Game has stopped!\n");
                             server.close();
                             System.exit(0);
                         } else {
@@ -64,7 +71,8 @@ public class Server {
                                 gameRound.addAll(lobby);
                                 lobby.removeAll(lobby);
                             }
-                            System.out.println("Time's up! New players will not be accepted!");
+                            System.out.println("Time's up! New players will not be accepted!\n");
+                            MyLogger.log(Level.INFO, "Time's up! New players will not be accepted!\n");
                             break;
                         }
                     } catch (SocketException e) {
@@ -79,6 +87,7 @@ public class Server {
                         Long endTime = System.currentTimeMillis();
                         if((endTime - startTime)/1000 == 3000) {
                             System.out.println("5-minute mark has reached. Game will stop!");
+                            MyLogger.log(Level.INFO, "5-minute mark has reached. Game will stop!");
                             System.exit(0);
                         }
 
@@ -99,17 +108,19 @@ public class Server {
                         }
 
                         while (true) {
-                            System.out.print("Current Player: ");
+                            System.out.print("Current Player: \n");
 
                             for(ClientHandler player : gameRound) {
                                 player.join(); // wait for all players entering their name
-                                System.out.print(player.getPlayerName() + " ");
+                                System.out.print("* " + player.getPlayerName() + "\n");
+                                MyLogger.log(Level.INFO, (player.getPlayerName() + " "));
                             }
 
                             // start the game round
                             System.out.println("\n---------------------------------------------");
                             setRandomNum(generateRanInt(MIN,MAX));
-                            System.out.println("Randomly generated number: " + getRandomNum());
+                            System.out.println("Randomly generated number: " + getRandomNum() + "\n");
+                            MyLogger.log(Level.INFO, ("Randomly generated number: " + getRandomNum()));
                             int n = 0;
                             for(ClientHandler player : gameRound) {
                                 // reset game round with newly updated players
@@ -125,14 +136,20 @@ public class Server {
 
                             for(ClientHandler player : gameRound) {
                                 player.join();
+                            }
+                            // sort the game round according to rank position
+                            gameRound.sort(Comparator.comparing(ClientHandler::getRankPosition));
+
+
+                            System.out.println("Final Ranking: ");
+                            for(int i=0; i<gameRound.size(); i++) {
+                                System.out.println((i+1) +". " + gameRound.get(i).getPlayerName() + " " + gameRound.get(i).getRankPosition());
+
                                 // check if user input equal q or p
-                                if(player.getUserInput() != null) {
-                                    if(player.getUserInput().equals("p")) {
-                                        lobby.add(player);
+                                if(gameRound.get(i).getUserInput() != null) {
+                                    if(gameRound.get(i).getUserInput().equals("p")) {
+                                        lobby.add(gameRound.get(i));
                                     }
-                                }
-                                else {
-                                    System.out.println("No user input is found!");
                                 }
                             }
                             gameRound.removeAll(gameRound); // empty the game round

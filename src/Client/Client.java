@@ -2,9 +2,9 @@
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Scanner;
 import java.util.Timer;
 
@@ -20,7 +20,7 @@ public class Client extends Thread {
     private String userInput;
     private String name;
     private static final long DELAY = 10000;
-    private static final long INTERVAL = 10000;
+    private static final long INTERVAL = 270000;
 
 
 
@@ -62,6 +62,7 @@ public class Client extends Thread {
                         System.out.println("Only letters are allowed!");
                     }
                 }
+
 
                 // Game start message received from the server
                 System.out.println(in.readUTF());
