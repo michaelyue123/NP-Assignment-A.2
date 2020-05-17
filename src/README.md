@@ -4,13 +4,14 @@ Guessing Game is a multi-player game supported by the socket connection establis
 
 starts with server first randomly generating a number between 0~12 and then each player that successfully connects to
 
-the game server can start guessing the number. Each player gets maximum of four guesses for one game round. At each wrong
+the game server can start guessing the number. Each player gets maximum of four guesses for one game round. At each 
 
-guess, player receives a hint from the server saying "the guessed number is bigger or smaller than the random
+wrong guess, player receives a hint from the server saying "the guessed number is bigger or smaller than the random
 
-number". If a player correctly guesses the number, the server then announces a message like "Congratulation XXX!". After
+number". If a player correctly guesses the number, the server then announces a message like "Congratulation XXX!". 
 
-four guesses, if player still cannot get the number right, server will then announce the answer.
+After four guesses, if player still cannot get the number right, server will then announce the answer.
+
 
 
 Importantly, each player connects to the server will be taken to the lobby first. The lobby can hold maximum of six
