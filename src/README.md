@@ -13,8 +13,6 @@ number". If a player correctly guesses the number, the server then announces a m
 After four guesses, if player still cannot get the number right, server will then announce the answer.
 
 
-
-
 Importantly, each player connects to the server will be taken to the lobby first. The lobby can hold maximum of six
 
 players in total. Then at each game round, the first three players in the lobby will be taken to the game round and
