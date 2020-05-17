@@ -99,21 +99,25 @@ public class ClientHandler extends Thread {
                    numberInput_timer.cancel(); // once receive user input, stop the timer
                    guessedNum = Integer.parseInt(guessNum.trim()); // parse user input to integer
 
-                   if (guessedNum == getRandomNum()) { // if randomly generated number equals to input, player wins
+                   // if randomly generated number equals to input, player wins
+                   if (guessedNum == getRandomNum()) {
                        out.writeUTF("Congratulation! You got it!");
                        System.out.println("\n" + getPlayerName() + " got congratulated. " + getPlayerName() + " " + numOfChance + "\n");
                        MyLogger.log(Level.INFO, (getPlayerName() + " got congratulated. " + getPlayerName() + " " + numOfChance));
                        break;
+                   //  if guessed number bigger than random number, server sends this message to client
                    } else if (guessedNum > getRandomNum()) {
                        out.writeUTF("Sorry, guessed number " + guessedNum + " is larger than the generated number!\n" +
                                "Number of guess used is " + numOfChance);
                        numOfChance++;
+                   //  if guessed number smaller than random number, server sends this message to client
                    } else {
                        out.writeUTF("Sorry, guessed number " + guessedNum + " is smaller than the generated number!\n" +
                                "Number of guess used is " + numOfChance);
                        numOfChance++;
                    }
 
+                   // if player has reached maximum four guesses, server announces the answer
                    if (numOfChance == MAX_GUESS+1) {
                        out.writeUTF("You've used up all you chance! The correct answer is " +
                                getRandomNum());
@@ -128,6 +132,7 @@ public class ClientHandler extends Thread {
            }
            // get the rank position of client
            rankPosition = numOfChance;
+           // store name and ranking position into a hashmap
            playerInfo.put(getRankPosition(), getPlayerName());
 
 
@@ -140,10 +145,12 @@ public class ClientHandler extends Thread {
                   userInput = in.readUTF();
                   replayInput_timer.cancel(); // once receive user input, stop the timer
 
+                  // if client message equals to q, end this thread
                   if ("q".equals(userInput)) {
                       System.out.println("\n" + getPlayerName() + " has quit the game!\n");
                       MyLogger.log(Level.INFO, (getPlayerName() + " has quit the game!"));
                   } else {
+                  // if client message equals to p, re-add player to lobby
                       out.writeUTF("Re-add you to lobby! Please wait...");
                   }
                   break;

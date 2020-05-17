@@ -2,7 +2,6 @@
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -113,13 +112,14 @@ public class Client extends Thread {
                     replayInput_timer.scheduleAtFixedRate(new ClientTask(in), DELAY, INTERVAL);
                     userInput = sc.nextLine();
 
-                    // only p or q is allowed
+                    // if user input equals to p, wait for server message to restart a new round
                     if("p".equals(userInput)) {
                         out.writeUTF(userInput);
                         replayInput_timer.cancel(); // After sending message to server, cancel the timer.
                         System.out.println(in.readUTF());
                         break;
                     }
+                    // if user input equals to q, then user quits the game
                     else if("q".equals(userInput)) {
                         out.writeUTF(userInput);
                         replayInput_timer.cancel(); // After sending message to server, cancel the timer.

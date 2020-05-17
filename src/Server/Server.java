@@ -85,6 +85,7 @@ public class Server {
 
                 while (true) {
                     try {
+                        // create start time and end time to control server expire time
                         Long endTime = System.currentTimeMillis();
                         if((endTime - startTime)/1000 == 3000) {
                             System.out.println("5-minute mark has reached. Game will stop!");
