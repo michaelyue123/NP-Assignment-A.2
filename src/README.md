@@ -42,8 +42,10 @@ cd Project Folder
 cd Server Folder
 ```
 
+You can cd multiple times for client folder on different terminal windows to mimic multiple-player scenario
+
 ```
-cd Client Folder (can cd multiple times on different terminal windows to mimic multiple-player scenario)
+cd Client Folder 
 ```
 
 ```
@@ -54,7 +56,9 @@ javac *.java (compile server and client files)
 java Server (launch server first)
 ```
 
+You can do this inside multiple terminal windows
+
 ```
-java Client (can do this inside multiple termianl windows)
+java Client 
 ```
 
