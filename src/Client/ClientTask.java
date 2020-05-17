@@ -18,9 +18,10 @@ public class ClientTask extends TimerTask {
         try {
             // print the message from server
             inputFromServer.readUTF();
+            System.out.println("Are you still there?");
         }
         catch (EOFException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
         catch (IOException e) {
             e.printStackTrace();

@@ -19,6 +19,9 @@ public class Client extends Thread {
     private static final int MAX_GUESS = 4;
     private String userInput;
     private String name;
+    private static final long DELAY = 10000;
+    private static final long INTERVAL = 10000;
+
 
 
     public Client() {
@@ -42,29 +45,23 @@ public class Client extends Thread {
             // read the message from server
             System.out.println(in.readUTF()); // print out the welcome message
 
+
             while (true) {
                 if(this.name == null) {
                     System.out.println("Please enter your name first: ");
+                    // create a timer and receive server message every 5s if client is not active
+                    Timer nameInput_timer = new Timer("NameInput Timer");
+                    nameInput_timer.scheduleAtFixedRate(new ClientTask(in), DELAY, INTERVAL);
                     userInput = sc.nextLine();
+
                     if(userInput.matches("^[A-Za-z]+([ A-Za-z]+)*")) {
                         setPlayerName(userInput);
                         out.writeUTF(userInput); // send client message to server
+                        nameInput_timer.cancel(); // After sending message to server, cancel the timer.
                     }else {
                         System.out.println("Only letters are allowed!");
                     }
                 }
-
-
-//                    // create a timer to receive server message every 10s if client is not active
-//                    Timer timer = new Timer("Client Timer");
-//                    long delay = 10000;
-//                    long interval = 10000;
-//                    timer.scheduleAtFixedRate(new ClientTask(in), delay, interval);
-
-//                    timer.cancel(); // stop timer once there is user input
-
-//                serverMessage = in.readUTF();
-
 
                 // Game start message received from the server
                 System.out.println(in.readUTF());
@@ -72,11 +69,14 @@ public class Client extends Thread {
                 int numOfChance = 0;
 
                 while(numOfChance < MAX_GUESS) {
+                    Timer numberInput_timer = new Timer("NumberInput Timer");
+                    numberInput_timer.scheduleAtFixedRate(new ClientTask(in), DELAY, INTERVAL);
                     userInput = sc.nextLine();
+
                     // input needs be number within 0 to 12 this range
                     if(userInput.matches("^([0-9]|1[012])$")) {
-
                         out.writeUTF(userInput);
+                        numberInput_timer.cancel(); // After sending message to server, cancel the timer.
                         String hintMessage = in.readUTF();
                     // if server message starts with C, it then congratulates player and player leaves the game round.
                         if(hintMessage.startsWith("C")) {
@@ -108,16 +108,20 @@ public class Client extends Thread {
                 System.out.println(replayMessage);
 
                 while (true) {
+                    Timer replayInput_timer = new Timer("ReplayInput Timer");
+                    replayInput_timer.scheduleAtFixedRate(new ClientTask(in), DELAY, INTERVAL);
                     userInput = sc.nextLine();
 
                     // only p or q is allowed
                     if("p".equals(userInput)) {
                         out.writeUTF(userInput);
+                        replayInput_timer.cancel(); // After sending message to server, cancel the timer.
                         System.out.println(in.readUTF());
                         break;
                     }
                     else if("q".equals(userInput)) {
                         out.writeUTF(userInput);
+                        replayInput_timer.cancel(); // After sending message to server, cancel the timer.
                         System.out.println("You have quit the game! GoodBye!");
                         in.close();
                         out.close();

@@ -3,6 +3,7 @@
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.TimerTask;
 
 public class ServerTask extends TimerTask {
@@ -19,11 +20,14 @@ public class ServerTask extends TimerTask {
             // send message to Client
             outPutToClient.writeUTF("Are you still there?");
         }
+        catch (SocketException e) {
+            System.out.println("");
+        }
         catch (EOFException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
         catch (IOException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
     }
 }

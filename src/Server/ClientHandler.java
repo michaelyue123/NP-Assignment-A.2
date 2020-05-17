@@ -6,6 +6,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Timer;
 
 
 public class ClientHandler extends Thread {
@@ -20,6 +21,8 @@ public class ClientHandler extends Thread {
     private static int guessedNum = 0;
     private String userInput;
     private boolean hasChangeAction = false;
+    private static final long DELAY = 10000;
+    private static final long INTERVAL = 10000;
 
     public ClientHandler(Socket connection, Server server, String name) {
         try {
@@ -47,7 +50,12 @@ public class ClientHandler extends Thread {
                     out.writeUTF("Welcome to guessing game! You have maximum four guesses and at each wrong guess" +
                             " you will receive a hint. At the end, server will announce the answer.\n");
 
-                    inputPlayerName();
+                    Timer nameInput_timer = new Timer("NameInput Timer");
+                    nameInput_timer.scheduleAtFixedRate(new ServerTask(out), DELAY, INTERVAL);
+                    // receive client name input
+                    String playerName = in.readUTF();
+                    nameInput_timer.cancel(); // once receive the user input, stop the timer
+                    setPlayerName(playerName);
                 }else {
                     if(hasChangeAction == true) {
                         gameRound();
@@ -56,8 +64,8 @@ public class ClientHandler extends Thread {
                 break;
             }
         }
-        catch (NullPointerException e) {
-            e.printStackTrace();
+        catch (EOFException e) {
+            System.out.println("\nOne player has disconnected from the server");
         }
         catch (SocketException e) {
             e.printStackTrace();
@@ -67,23 +75,23 @@ public class ClientHandler extends Thread {
         }
     }
 
-    // client sends name and wait
-    public void inputPlayerName() throws IOException {
-        // receive client name input
-        String playerName = in.readUTF();
-        setPlayerName(playerName);
-    }
 
     public void gameRound() throws IOException, SocketException {
        try {
            out.writeUTF("Game Starts! Please enter a number: ");
            int numOfChance = 0;
            randomNum = server.getRandomNum(); // set the random number to auto-generated number from the server
+
            while (numOfChance < MAX_GUESS) {
                try {
+                   // create a timer and send message to client every 5s if client is not active
+                   Timer numberInput_timer = new Timer("NumberInput Timer");
+                   numberInput_timer.scheduleAtFixedRate(new ServerTask(out), DELAY, INTERVAL);
                    // receive client guess number
                    String guessNum = in.readUTF();
+                   numberInput_timer.cancel(); // once receive user input, stop the timer
                    guessedNum = Integer.parseInt(guessNum.trim()); // parse user input to integer
+
                    if (guessedNum == getRandomNum()) { // if randomly generated number equals to input, player wins
                        out.writeUTF("Congratulation! You got it!");
                        System.out.println(getPlayerName() + " has ended the game. " + getPlayerName() + " " + (numOfChance + 1));
@@ -114,7 +122,12 @@ public class ClientHandler extends Thread {
            while (true) {
               try {
                   out.writeUTF("Choose p to play again or q to quit.");
+                  // create a timer and send message to client every 5s if client is not active
+                  Timer replayInput_timer = new Timer("ReplayInput Timer");
+                  replayInput_timer.scheduleAtFixedRate(new ServerTask(out), DELAY, INTERVAL);
                   userInput = in.readUTF();
+                  replayInput_timer.cancel(); // once receive user input, stop the timer
+
                   if ("q".equals(userInput)) {
                       System.out.println(getPlayerName() + " has quit the game!");
                   } else {
