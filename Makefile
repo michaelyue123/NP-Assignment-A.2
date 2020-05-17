@@ -11,6 +11,7 @@ CLASSES = \
         GameLogger.java \
         Client.java \
         ClientTask.java \
+        Main.java
 
 default: classes
 

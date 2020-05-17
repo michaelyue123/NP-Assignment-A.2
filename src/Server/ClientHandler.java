@@ -6,6 +6,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ public class ClientHandler extends Thread {
     private static final long INTERVAL = 270000;
     private static int rankPosition;
     private static Logger MyLogger = GameLogger.getLogger();
+    private HashMap<Integer, String> playerInfo = new HashMap<>();
 
 
     public ClientHandler(Socket connection, Server server, String name) {
@@ -124,9 +126,9 @@ public class ClientHandler extends Thread {
                    break;
                }
            }
-
            // get the rank position of client
            rankPosition = numOfChance;
+           playerInfo.put(getRankPosition(), getPlayerName());
 
 
            while (true) {
@@ -183,5 +185,9 @@ public class ClientHandler extends Thread {
 
     public int getRankPosition() {
         return rankPosition;
+    }
+
+    public HashMap<Integer, String> getPlayerInfo() {
+        return playerInfo;
     }
 }

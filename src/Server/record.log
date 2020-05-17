@@ -1,0 +1,38 @@
+May 17, 2020 7:42:50 PM Server <init>
+INFO: Server starts
+May 17, 2020 7:42:50 PM Server <init>
+INFO: Waiting for new player loading for 10s
+May 17, 2020 7:42:51 PM Server <init>
+INFO: One player has joined the game!
+
+May 17, 2020 7:42:53 PM Server <init>
+INFO: One player has joined the game!
+
+May 17, 2020 7:42:54 PM Server <init>
+INFO: One player has joined the game!
+
+May 17, 2020 7:43:04 PM Server <init>
+INFO: Time's up! New players will not be accepted!
+
+May 17, 2020 7:43:07 PM Server <init>
+INFO: Michael 
+May 17, 2020 7:43:10 PM Server <init>
+INFO: Hank 
+May 17, 2020 7:43:12 PM Server <init>
+INFO: Will 
+May 17, 2020 7:43:12 PM Server <init>
+INFO: Randomly generated number: 6
+May 17, 2020 7:43:17 PM ClientHandler gameRound
+INFO: Michael got congratulated. Michael 4
+May 17, 2020 7:43:38 PM ClientHandler gameRound
+INFO: Hank got congratulated. Hank 2
+May 17, 2020 7:43:45 PM ClientHandler gameRound
+INFO: Will got congratulated. Will 3
+May 17, 2020 7:43:55 PM Server <init>
+INFO: Michael 
+May 17, 2020 7:43:55 PM Server <init>
+INFO: Hank 
+May 17, 2020 7:43:55 PM Server <init>
+INFO: Will 
+May 17, 2020 7:43:55 PM Server <init>
+INFO: Randomly generated number: 11

@@ -18,6 +18,7 @@ public class Server {
     private static int randomNum;
     private static final int ALLOWED_NUMBER = 3;
     private static Logger MyLogger = GameLogger.getLogger();
+    private TreeMap<Integer, String> playerInfo = new TreeMap<>();
 
 
     public Server() {
@@ -89,6 +90,7 @@ public class Server {
                             System.out.println("5-minute mark has reached. Game will stop!");
                             MyLogger.log(Level.INFO, "5-minute mark has reached. Game will stop!");
                             System.exit(0);
+                            server.close();
                         }
 
                         System.out.println("---------------------------------------------");
@@ -136,15 +138,16 @@ public class Server {
 
                             for(ClientHandler player : gameRound) {
                                 player.join();
+                                playerInfo.putAll(player.getPlayerInfo()); // copy player info from clientHandler to server
+                                // TreeMap is naturally sorted
                             }
-                            // sort the game round according to rank position
-                            gameRound.sort(Comparator.comparing(ClientHandler::getRankPosition));
-
 
                             System.out.println("Final Ranking: ");
-                            for(int i=0; i<gameRound.size(); i++) {
-                                System.out.println((i+1) +". " + gameRound.get(i).getPlayerName() + " " + gameRound.get(i).getRankPosition());
+                            for(Map.Entry<Integer, String> entry : playerInfo.entrySet()) {
+                                System.out.println(entry.getKey() + " "+ entry.getValue());
+                            }
 
+                            for(int i=0; i<gameRound.size(); i++) {
                                 // check if user input equal q or p
                                 if(gameRound.get(i).getUserInput() != null) {
                                     if(gameRound.get(i).getUserInput().equals("p")) {
