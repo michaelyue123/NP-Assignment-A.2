@@ -31,7 +31,7 @@ same rule applies here: each game round will only take the first three players i
 ## Built with
 * Java
 
-### Perquisites
+### Prerequisites
 * JDK8 or higher version
 
 ### Run the project on local terminal
