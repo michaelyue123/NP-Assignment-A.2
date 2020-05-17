@@ -1,6 +1,6 @@
 
 # Guessing Game
-Guessing Game is a multi-player game supported by the socket connection established between server and client. Games
+Guessing Game is a multi-player game supported by the socket connection established between server and client. Game
 
 starts with server first randomly generating a number between 0~12 and then each player that successfully connects to
 
