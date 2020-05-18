@@ -1,4 +1,5 @@
 
+
 # Guessing Game
 Guessing Game is a multi-player game supported by the socket connection established between server and client. Game
 
@@ -30,7 +31,7 @@ same rule applies here: each game round will only take the first three players i
 ## Built with
 * Java
 
-### Perquisites
+### Prerequisites
 * JDK8 or higher version
 
 ### Run the project on local terminal
@@ -87,3 +88,5 @@ javac .java
 ```
 java Server/Client
 ```
+
+
