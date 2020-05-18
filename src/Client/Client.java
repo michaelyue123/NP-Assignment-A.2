@@ -9,7 +9,7 @@ import java.util.Timer;
 
 public class Client extends Thread {
 
-    private static final String HOST = "localhost";
+    private static final String HOST = "netprog1.csit.rmit.edu.au";
     private static final int PORT = 61246;
     private Socket client;
     private Scanner sc;
