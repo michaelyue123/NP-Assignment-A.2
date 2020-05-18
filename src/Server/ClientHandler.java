@@ -91,7 +91,7 @@ public class ClientHandler extends Thread {
 
            while (numOfChance <= MAX_GUESS) {
                try {
-                   // create a timer and send message to client every 5s if client is not active
+                   // create a timer and send message to client if client is not active
                    Timer numberInput_timer = new Timer("NumberInput Timer");
                    numberInput_timer.scheduleAtFixedRate(new ServerTask(out), DELAY, INTERVAL);
                    // receive client guess number
@@ -139,7 +139,7 @@ public class ClientHandler extends Thread {
            while (true) {
               try {
                   out.writeUTF("Choose p to play again or q to quit.");
-                  // create a timer and send message to client every 5s if client is not active
+                  // create a timer and send message to client if client is not active
                   Timer replayInput_timer = new Timer("ReplayInput Timer");
                   replayInput_timer.scheduleAtFixedRate(new ServerTask(out), DELAY, INTERVAL);
                   userInput = in.readUTF();
@@ -149,6 +149,8 @@ public class ClientHandler extends Thread {
                   if ("q".equals(userInput)) {
                       System.out.println("\n" + getPlayerName() + " has quit the game!\n");
                       MyLogger.log(Level.INFO, (getPlayerName() + " has quit the game!"));
+                      in.close();
+                      out.close();
                   } else {
                   // if client message equals to p, re-add player to lobby
                       out.writeUTF("Re-add you to lobby! Please wait...");

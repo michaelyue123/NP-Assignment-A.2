@@ -9,7 +9,7 @@ import java.util.Timer;
 
 public class Client extends Thread {
 
-    private static final String HOST = "netprog1.csit.rmit.edu.au";
+    private static final String HOST = "localhost";
     private static final int PORT = 61246;
     private Socket client;
     private Scanner sc;
@@ -48,7 +48,7 @@ public class Client extends Thread {
             while (true) {
                 if(this.name == null) {
                     System.out.println("Please enter your name first: ");
-                    // create a timer and receive server message every 5s if client is not active
+                    // create a timer and receive server message if client is not active
                     Timer nameInput_timer = new Timer("NameInput Timer");
                     nameInput_timer.scheduleAtFixedRate(new ClientTask(in), DELAY, INTERVAL);
                     userInput = sc.nextLine();
@@ -84,7 +84,7 @@ public class Client extends Thread {
                             break;
                         }
                         else if(hintMessage.contains("larger")) {
-                    // if server message contains larger, it then prints out the message and player leaves the game round.
+                    // if server message contains larger, it then prints out the message and player tries again.
                             System.out.println(hintMessage);
                             numOfChance++;
                         }
@@ -102,10 +102,8 @@ public class Client extends Thread {
                     }
                 }
 
-
                 // print out server message to ask whether player wants to play again or not
-                String replayMessage = in.readUTF();
-                System.out.println(replayMessage);
+                System.out.println(in.readUTF());
 
                 while (true) {
                     Timer replayInput_timer = new Timer("ReplayInput Timer");
@@ -127,6 +125,7 @@ public class Client extends Thread {
                         in.close();
                         out.close();
                         sc.close();
+                        client.close();
                         System.exit(0);
                         break;
                     }

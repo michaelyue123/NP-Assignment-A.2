@@ -40,7 +40,7 @@ public class Server {
             while (true) {
                 while (true) {
                     try {
-                        server.setSoTimeout(10000); // after 10s, server will not accept any connection
+                        server.setSoTimeout(20000); // after 20s, server will not accept any connection
                         // accept connection from the client
                         connection = server.accept();
 
@@ -66,12 +66,16 @@ public class Server {
                             if (lobby.size() > 3) {
                                 for (int i = 0; i < ALLOWED_NUMBER; i++) {
                                     gameRound.add(lobby.get(i));
+                                }
+                                for (int i=0; i<ALLOWED_NUMBER; i++) {
                                     lobby.remove(); // remove first three elements inside lobby
                                 }
                             } else {
                                 gameRound.addAll(lobby);
-                                lobby.removeAll(lobby);
+                                lobby.removeAll(lobby); // remove all elements inside lobby
                             }
+
+
                             System.out.println("Time's up! New players will not be accepted!\n");
                             MyLogger.log(Level.INFO, "Time's up! New players will not be accepted!\n");
                             break;
@@ -87,7 +91,7 @@ public class Server {
                     try {
                         // create start time and end time to control server expire time
                         Long endTime = System.currentTimeMillis();
-                        if((endTime - startTime)/1000 == 3000) {
+                        if((endTime - startTime)/1000 == 300) {
                             System.out.println("5-minute mark has reached. Game will stop!");
                             MyLogger.log(Level.INFO, "5-minute mark has reached. Game will stop!");
                             System.exit(0);
@@ -148,6 +152,8 @@ public class Server {
                                 System.out.println(entry.getKey() + " "+ entry.getValue());
                             }
 
+                            playerInfo.clear(); // clear TreeMap
+
                             for(int i=0; i<gameRound.size(); i++) {
                                 // check if user input equal q or p
                                 if(gameRound.get(i).getUserInput() != null) {
@@ -166,6 +172,8 @@ public class Server {
                             else if(lobby.size() > 3) {
                                 for(int i=0; i< ALLOWED_NUMBER; i++) {
                                     gameRound.add(lobby.get(i)); // move first three players from lobby to game round
+                                }
+                                for(int i=0; i<ALLOWED_NUMBER; i++) {
                                     lobby.remove(); // remove first three elements inside lobby
                                 }
                             }

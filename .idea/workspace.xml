@@ -3,13 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="dd8e1a80-d890-4879-a560-5c24f21afd50" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/ClientHandler$Player.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ClientHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Server.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,6 +114,8 @@
       <workItem from="1588566465888" duration="14061000" />
       <workItem from="1588591453613" duration="17803000" />
       <workItem from="1588902582705" duration="151318000" />
+      <workItem from="1589713253377" duration="1115000" />
+      <workItem from="1589756996711" duration="3276000" />
     </task>
     <servers />
   </component>
@@ -186,10 +183,11 @@
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>
     <state x="1237" y="-1179" key="SettingsEditor/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1589174492362" />
-    <state x="1258" y="-928" key="com.intellij.ide.util.TipDialog" timestamp="1588591454896">
-      <screen x="-766" y="-1417" width="3440" height="1314" />
+    <state x="988" y="372" key="com.intellij.ide.util.TipDialog" timestamp="1589757007127">
+      <screen x="0" y="23" width="1680" height="937" />
     </state>
-    <state x="1258" y="-928" key="com.intellij.ide.util.TipDialog/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1588591454896" />
+    <state x="1258" y="-928" key="com.intellij.ide.util.TipDialog/-766.-1417.3440.1314/0.23.1680.1027@-766.-1417.3440.1314" timestamp="1589713254291" />
+    <state x="988" y="372" key="com.intellij.ide.util.TipDialog/0.23.1680.937@0.23.1680.937" timestamp="1589757007127" />
     <state x="1279" y="-1118" width="670" height="676" key="search.everywhere.popup" timestamp="1589700546824">
       <screen x="-766" y="-1417" width="3440" height="1314" />
     </state>

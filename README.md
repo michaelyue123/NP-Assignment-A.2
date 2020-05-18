@@ -33,7 +33,7 @@ same rule applies here: each game round will only take the first three players i
 ### Perquisites
 * JDK8 or higher version
 
-### Run the project on the terminal
+### Run the project on local terminal
 
 ```
 cd Project Folder
@@ -53,7 +53,7 @@ cd Client Folder
 javac *.java (compile server and client files)
 ```
 
-launch server first
+* launch server first
 
 ```
 java Server 
@@ -65,3 +65,25 @@ java Server
 java Client 
 ```
 
+
+### Run the project on netprog1 and netprog2 server
+* Copy Project to netprog1 (Server) and netprog2 (Client) server via the command below
+
+```
+git clone GitHub_Project_Url
+```
+* Following commands are the exactly same as the commands above
+
+```
+cd Project Folder
+```
+
+```
+cd Server/Client
+```
+```
+javac .java
+```
+```
+java Server/Client
+```
